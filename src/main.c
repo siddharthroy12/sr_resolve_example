@@ -12,13 +12,26 @@
 #define WIDTH 30
 #define HEIGHT 30
 
+Rectangle from_sr_rec(sr_rec rec) {
+    return (Rectangle){
+        .x = rec.x,
+        .y = rec.y,
+        .width = rec.width,
+        .height = rec.height
+    };
+}
+
 int main() {
     srand(time(0));
     InitWindow(800, 500, "sr_resolve_example");
 
-    Rectangle static_recs[20] = { 0 };
+    sr_rec static_recs[10] = { 0 };
 
-    Rectangle player = {
+    sr_rec static_recs2[10] = { 0 };
+
+    sr_rec static_recs_final[20] = { 0 };
+
+    sr_rec player = {
         .x = 800/2,
         .y = 500/2,
         .width = WIDTH,
@@ -28,13 +41,30 @@ int main() {
     int speed = 500;
     Vector2 dir = { 0.0f, 0.0f };
 
-    for (int i = 0; i < 20; i++) {
-        static_recs[i] = (Rectangle){
-            .x = rand_range(0, 800),
-            .y = rand_range(0, 500),
+    for (int i = 0; i < 10; i++) {
+        static_recs[i] = (sr_rec){
+            .x = (i + 5) * WIDTH,
+            .y = 300,
             .width = WIDTH,
             .height = HEIGHT
         };
+    }
+
+    for (int i = 0; i < 10; i++) {
+        static_recs2[i] = (sr_rec){
+            .x = 300,
+            .y =  (i + 5) * HEIGHT,
+            .width = WIDTH,
+            .height = HEIGHT
+        };
+    }
+
+    for (int i = 0; i < 10; i++) {
+        static_recs_final[i] = static_recs[i];
+    }
+
+    for (int i = 10; i < 20; i++) {
+        static_recs_final[i] = static_recs2[i-10];
     }
 
     while (!WindowShouldClose()) {
@@ -53,44 +83,22 @@ int main() {
             dir.x = -1;
         }
 
-        // Move the player
-        player.x += dir.x * speed * GetFrameTime();
-        player.y += dir.y * speed * GetFrameTime();
+        // Move the player and collide
+        player = sr_move_and_collide(static_recs_final, 20, player, (sr_vec2){
+			.x = dir.x * speed * GetFrameTime(),
+        	.y = dir.y * speed * GetFrameTime(),
+		});
 
-        // Check for collision
-        for (int i = 0; i < 20; i++) {
-            sr_rec static_rec = (sr_rec){
-                .x = static_recs[i].x,
-                .y = static_recs[i].y,
-                .width = static_recs[i].width,
-                .height = static_recs[i].height
-            };
-
-            sr_rec player_rec = (sr_rec){
-                .x = player.x,
-                .y = player.y,
-                .width = player.width,
-                .height = player.height
-            };
-
-            player_rec = sr_resolver_rects_collision(static_rec, player_rec);
-
-            player = (Rectangle){
-                .x = player_rec.x,
-                .y = player_rec.y,
-                .width = player_rec.width,
-                .height = player_rec.height
-            };
-        }
-
+        
         BeginDrawing();
             ClearBackground(RAYWHITE);
 
             for (int i = 0; i < 20; i++) {
-                DrawRectangleRec(static_recs[i], RED);
+                DrawRectangleRec(from_sr_rec(static_recs_final[i]), RED);
+                DrawRectangleLinesEx(from_sr_rec(static_recs_final[i]), 1, BLACK);
             }
 
-            DrawRectangleRec(player, GREEN);
+            DrawRectangleRec(from_sr_rec(player), GREEN);
 
         EndDrawing();
     }

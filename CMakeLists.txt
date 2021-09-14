@@ -8,8 +8,7 @@ set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
 set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # or games
 add_subdirectory(libs/raylib)
 
-file(GLOB_RECURSE APP_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/*.c)
-add_executable(${CMAKE_PROJECT_NAME} ${APP_SOURCES})
+add_executable(${CMAKE_PROJECT_NAME} src/main.c)
 target_link_libraries(${CMAKE_PROJECT_NAME} raylib)
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/") # Set the asset path macro to the absolute path on the dev machine

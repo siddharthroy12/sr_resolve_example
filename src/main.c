@@ -36,6 +36,10 @@ sr_rec to_sr_rec(Rectangle rec) {
 	return (sr_rec){rec.x, rec.y, rec.width, rec.height};
 }
 
+Rectangle to_rec(sr_rec rec) {
+    return (Rectangle){rec.x, rec.y, rec.width, rec.height};
+}
+
 
 int main(void)
 {
@@ -63,13 +67,13 @@ int main(void)
     objects[2] = (sr_rec){ 50.0f, 200.0f, 20.0f, 20.0f };
     objects[3] = (sr_rec){ 70.0f, 200.0f, 20.0f, 20.0f };
     objects[4] = (sr_rec){ 90.0f, 200.0f, 20.0f, 20.0f };
-    objects[5] = (sr_rec){ 110.0f, 200.0f, 20.0f, 20.0f  };
-    objects[6] = (sr_rec){ 130.0f, 200.0f, 20.0f, 20.0f };
-    objects[7] = (sr_rec){ 150.0f, 200.0f, 20.0f, 20.0f };
-    objects[8] = (sr_rec){ 170.0f, 200.0f, 20.0f, 20.0f };
-    objects[9] = (sr_rec){ 190.0f, 200.0f, 20.0f, 20.0f };
+    objects[5] = (sr_rec){ 10.0f, 250.0f, 20.0f, 20.0f };
+    objects[6] = (sr_rec){ 30.0f, 250.0f, 20.0f, 20.0f };
+    objects[7] = (sr_rec){ 50.0f, 250.0f, 20.0f, 20.0f };
+    objects[8] = (sr_rec){ 70.0f, 250.0f, 20.0f, 20.0f };
+    objects[9] = (sr_rec){ 90.0f, 250.0f, 20.0f, 20.0f };
 
-    objects[10] = (sr_rec){ 5.0f, 150.0f, 5.0f, 70.0f };
+    objects[10] = (sr_rec){ 110.0f, 200.0f, 20.0f, 20.0f };
     objects[11] = (sr_rec){ 210.0f, 150.0f, 5.0f, 70.0f };
 
     objects[12] = (sr_rec){ 100.0f, 20.0f, 30.0f, 100.0f };
@@ -125,6 +129,7 @@ int main(void)
             // Draw objects
             for (int i = 0; i < k; i++) {
                 DrawRectangle(objects[i].x, objects[i].y, objects[i].width, objects[i].height, RED);
+                DrawRectangleLinesEx(to_rec(objects[i]), 1, GREEN);
             }
 
             // Move and slide player
